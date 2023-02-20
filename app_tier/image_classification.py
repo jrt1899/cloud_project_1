@@ -26,6 +26,6 @@ def classify_image(filename):
     with open('./imagenet-labels.json') as f:
         labels = json.load(f)
     result = labels[np.array(predicted)[0]]
-    save_name = f"{filename},{result}"
+    save_name = f"({filename[:-5]}, {result})"
     print(f"{save_name}")
     return save_name

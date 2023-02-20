@@ -48,11 +48,37 @@ def get_response() :
 
 
 
-def add_image_to_s3(filename) :
-    s3 = boto3.client('s3',region_name='us-east-1')
-    image = s3.upload_file(os.path.join(os.getcwd(),'upload_folder', filename),'project-1-input-images', filename)
-    #result = s3.uplode_file(r'PATH','project-2-output-image-class', 'FILENAME')
+def add_image_to_s3(filename, class_name):
+    try:
+        s3 = boto3.client('s3',region_name='us-east-1')
+        image = os.path.join(os.getcwd(),'upload_folder', filename)
+        s3.upload_file(image,'project-1-input-images', filename)
+        with open(image, 'rb') as data:
+            result = filename[:-5]
+            s3.upload_fileobj(data, 'project-2-output-image-class', result, ExtraArgs={'Metadata': {result: class_name}})
+    except Exception as e:
+        print('Error Occurred while Updating S3 Buckets!')
+        return e
+    
+    return 'S3 Buckets Updated!'
 
-
+def send_response(filename, class_name):
+    try:
+        response = sqs.send_message(
+            QueueUrl = res_queue_url,
+            DelaySeconds = 10,
+            MessageAttributes={
+                'filename': {
+                    'DataType': 'String',
+                    'StringValue': filename
+                }
+            },
+            MessageBody=(class_name)
+        )
+    except Exception as e:
+        print('Error Occurred while Sending Message to Response Queue!')
+        return e
+    
+    return 'Response Sent!'
 
 

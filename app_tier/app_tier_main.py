@@ -12,7 +12,6 @@ if __name__ == '__main__':
 
 		class_name = ic.classify_image(filename)
 		print(class_name)
-		ap.add_image_to_s3(filename)
-		# ap.add_image_to_s3(filename,class_name)
-		# send_response()
+		s3BucketMsg = ap.add_image_to_s3(filename, class_name)
+		resSqsMsg = ap.send_response(filename, class_name)
 		# delete_file_from_upload_folder()
