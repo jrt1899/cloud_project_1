@@ -7,6 +7,9 @@ import web_tier_module as wt
 #initializations
 app = Flask(__name__)
 
+# Run python3 web_tier.py in one terminal
+# Run curl -X POST -F myfile=@test_18.JPEG 'http://localhost:5000/accept_images' in another terminal
+
 @app.route('/accept_images',methods=['POST'])
 def accept_images():
     
