@@ -4,6 +4,7 @@ sqs = boto3.resource('sqs',region_name='us-east-1')
 
 #configurations request queue 
 req_queue = queue = sqs.get_queue_by_name(QueueName='RequestQueue')
+res_queue = queue = sqs.get_queue_by_name(QueueName='ResponseQueue')
 
 #configurations response queue
 
@@ -23,3 +24,39 @@ def send_message(file_name,content) :
 	)
 
 	return 'Sent'
+
+
+def receive_message():
+	response = res_queue.receive_message(
+    QueueUrl=res_queue.url,
+    AttributeNames=[
+        'filename'|'classname'
+    ],
+    MaxNumberOfMessages=1,
+    MessageAttributeNames=[
+        'All'
+    ],
+    VisibilityTimeout=0,
+    WaitTimeSeconds=0
+    )
+	
+	if('Messages' not in response):
+		return '-1'
+
+	message = response['Messages'][0]
+
+	filename = message['MessageAttributes']['filename']['StringValue']
+	receipt_handle = message['ReceiptHandle']
+
+
+	# message_body = (message['classname'])
+	message_body = message['Body']
+
+	print(message_body)
+    
+	sqs.delete_message(
+        QueueUrl=res_queue.url,
+        ReceiptHandle=receipt_handle
+    )
+
+	return message_body

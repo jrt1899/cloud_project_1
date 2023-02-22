@@ -25,7 +25,10 @@ def accept_images():
 
 
     #send sqs message
-    res = wt.send_message(file.filename,converted_string.decode('utf-8'))
+    req = wt.send_message(file.filename,converted_string.decode('utf-8'))
+
+    #recieve sqs message
+    res = wt.receive_message()
 
     return '1'
     
