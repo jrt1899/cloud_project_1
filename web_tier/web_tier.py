@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 # Run python3 web_tier.py in one terminal
 # Run curl -X POST -F myfile=@test_18.JPEG 'http://localhost:5000/accept_images' in another terminal
-
+files = []
 @app.route('/accept_images',methods=['POST'])
 def accept_images():
     
@@ -29,7 +29,7 @@ def accept_images():
 
     #send sqs message
     req = wt.send_message(file.filename,converted_string.decode('utf-8'))
-
+    files.append(file.filename)
     # time.sleep(10)
     # app_tier_main.callAppTier()
 
@@ -39,13 +39,10 @@ def accept_images():
 
     while True:
         res = wt.receive_message(file.filename)   
-        if res != -1:
+        if res != '-1':
             break
 
     return res
-
-
-    
 
 if __name__ == '__main__':
     # run app in debug mode on port 5000

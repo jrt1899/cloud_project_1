@@ -40,7 +40,7 @@ def receive_message(fn):
 		MessageAttributeNames=[
 			'All'
 		],
-		VisibilityTimeout=0,
+		VisibilityTimeout=1,
 		WaitTimeSeconds=20
     )
 	
@@ -60,10 +60,12 @@ def receive_message(fn):
 	# print(filename, fn)
 
 	if fn == filename:
+		print(fn,filename,receipt_handle)
 		deletedRes = sqsClient.delete_message(
 			QueueUrl=res_queue_url,
 			ReceiptHandle=receipt_handle
     	)
+		print(deletedRes)
 		return message_body
 	else:
-		return -1
+		return '-1'
