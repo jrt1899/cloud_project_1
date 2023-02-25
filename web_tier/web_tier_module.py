@@ -12,8 +12,8 @@ res_queue_url = 'https://sqs.us-east-1.amazonaws.com/749917607921/ResponseQueue'
 #configurations response queue
 
 def send_message(file_name,content) :
-	print(file_name)
-	print(req_queue.url)
+	# print(file_name)
+	# print(req_queue.url)
 	response = req_queue.send_message(
 	    QueueUrl=req_queue.url,
 	    DelaySeconds=10,
@@ -29,8 +29,8 @@ def send_message(file_name,content) :
 	return 'Sent'
 
 
-def receive_message():
-	print(res_queue.url)
+def receive_message(fn):
+	# print(res_queue.url)
 	response = sqsClient.receive_message(
 		QueueUrl=res_queue.url,
 		AttributeNames=[
@@ -41,7 +41,7 @@ def receive_message():
 			'All'
 		],
 		VisibilityTimeout=0,
-		WaitTimeSeconds=0
+		WaitTimeSeconds=20
     )
 	
 	if('Messages' not in response):
@@ -56,11 +56,14 @@ def receive_message():
 	# message_body = (message['classname'])
 	message_body = message['Body']
 
-	print(message_body)
-    
-	deletedRes = sqsClient.delete_message(
-        QueueUrl=res_queue_url,
-        ReceiptHandle=receipt_handle
-    )
+	# print(message_body)
+	# print(filename, fn)
 
-	return message_body
+	if fn == filename:
+		deletedRes = sqsClient.delete_message(
+			QueueUrl=res_queue_url,
+			ReceiptHandle=receipt_handle
+    	)
+		return message_body
+	else:
+		return -1

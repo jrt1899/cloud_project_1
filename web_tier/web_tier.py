@@ -34,11 +34,17 @@ def accept_images():
     # app_tier_main.callAppTier()
 
     #receive sqs message
-    time.sleep(3)
-    res = wt.receive_message()
-    print(res)
+    # time.sleep(3)
+    
+
+    while True:
+        res = wt.receive_message(file.filename)   
+        if res != -1:
+            break
 
     return res
+
+
     
 
 if __name__ == '__main__':
