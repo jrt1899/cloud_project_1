@@ -1,8 +1,11 @@
 from flask import Flask, redirect, url_for, request
-import os
+import os, time, sys
 import base64
 import web_tier_module as wt
 
+# sys.path.insert(1, '/Users/pandya09/Dhyey/Work/ASU/Sem 2/CSE546 Cloud Computing/Project/Project 1/cloud_project_1/app_tier')
+# from cloud_project_1.app_tier import app_tier_main
+# import app_tier_main as app
 
 #initializations
 app = Flask(__name__)
@@ -27,10 +30,15 @@ def accept_images():
     #send sqs message
     req = wt.send_message(file.filename,converted_string.decode('utf-8'))
 
-    #recieve sqs message
-    res = wt.receive_message()
+    # time.sleep(10)
+    # app_tier_main.callAppTier()
 
-    return '1'
+    #receive sqs message
+    time.sleep(3)
+    res = wt.receive_message()
+    print(res)
+
+    return res
     
 
 if __name__ == '__main__':
