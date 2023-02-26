@@ -3,14 +3,9 @@ import os, time, sys
 import base64
 import web_tier_module as wt
 
-# import app_tier_main as app
-
 #initializations
 app = Flask(__name__)
 
-# Run python3 web_tier.py in one terminal
-# Run curl -X POST -F myfile=@test_18.JPEG 'http://localhost:5000/accept_images' in another terminal
-files = []
 @app.route('/accept_images',methods=['POST'])
 def accept_images():
 
@@ -25,12 +20,6 @@ def accept_images():
 
     #send sqs message
     req = wt.send_message(file.filename,converted_string.decode('utf-8'))
-    files.append(file.filename)
-    # time.sleep(10)
-    # app_tier_main.callAppTier()
-
-    #receive sqs message
-    # time.sleep(3)
 
     while True:
         res = wt.receive_message(file.filename)
