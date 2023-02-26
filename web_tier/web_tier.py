@@ -28,8 +28,8 @@ def accept_images():
     print('sending response : ',res)
 
     #remove file from upload folder
-    if os.path.exists(os.path.join(os.getcwd(),'upload_folder', file.filename)):
-        os.remove(os.path.join(os.getcwd(),'upload_folder', file.filename))
+    # if os.path.exists(os.path.join(os.getcwd(),'upload_folder', file.filename)):
+    #     os.remove(os.path.join(os.getcwd(),'upload_folder', file.filename))
 
     return res
 
