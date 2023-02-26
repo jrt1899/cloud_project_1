@@ -14,7 +14,8 @@ import os
 
 
 def classify_image(filename):
-    url = str(os.path.join(os.getcwd(),'upload_folder', filename))
+    url = os.path.join('/home/ubuntu/app_tier/upload_folder', filename)
+    #url = str(os.path.join(os.getcwd(),'upload_folder', filename))
     img = Image.open(url)
     model = models.resnet18(pretrained=True)
 
@@ -23,7 +24,7 @@ def classify_image(filename):
     outputs = model(img_tensor)
     _, predicted = torch.max(outputs.data, 1)
 
-    with open('./imagenet-labels.json') as f:
+    with open('/home/ubuntu/app_tier/imagenet-labels.json') as f:
         labels = json.load(f)
     result = labels[np.array(predicted)[0]]
     save_name = f"({filename[:-5]}, {result})"
